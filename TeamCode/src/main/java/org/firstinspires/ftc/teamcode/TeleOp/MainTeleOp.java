@@ -1,4 +1,6 @@
 package org.firstinspires.ftc.teamcode.TeleOp;
+import static java.lang.Math.abs;
+
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.gamepad.GamepadKeys;
 import com.arcrobotics.ftclib.hardware.motors.Motor;
@@ -29,5 +31,26 @@ public class MainTeleOp extends LinearOpMode {
 
         }
 
+    }
+    public void driveRobotCentric(double strafeSpeed, double forwardBackSpeed, double turnSpeed) {
+        double[] speeds = {
+                (forwardBackSpeed + strafeSpeed - turnSpeed),
+                (forwardBackSpeed - strafeSpeed + turnSpeed),
+                (forwardBackSpeed - strafeSpeed - turnSpeed),
+                (forwardBackSpeed + strafeSpeed + turnSpeed)
+        };
+        double maxSpeed = 0;
+        for (int i = 0; i < 4; i++) {
+            maxSpeed = Math.max(maxSpeed, abs(speeds[i]));
+        }
+        if (maxSpeed > 1) {
+            for (int i = 0; i < 4; i++) {
+                speeds[i] /= maxSpeed;
+            }
+        }
+        fl.set(speeds[0]);
+        fr.set(speeds[1]);
+        bl.set(speeds[2]);
+        br.set(speeds[3]);
     }
 }
