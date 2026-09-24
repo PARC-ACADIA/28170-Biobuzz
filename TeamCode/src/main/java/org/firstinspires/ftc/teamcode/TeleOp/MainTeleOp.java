@@ -9,6 +9,8 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
+
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 
@@ -21,13 +23,17 @@ public class MainTeleOp extends LinearOpMode {
 
     public void runOpMode() throws InterruptedException{
         motor = hardwareMap.get(DcMotorEx.class, "Cannon");
+        speed = 1000;
         gp1 = new GamepadEx(gamepad1);
+        motor.setDirection(DcMotorSimple.Direction.REVERSE);
+        motor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         waitForStart();
         while (opModeIsActive()){
 
             if (gp1.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER) > 0.1) {
-                motor.setVelocity(speed*360, AngleUnit.DEGREES);
+                motor.setVelocity(speed*60, AngleUnit.DEGREES);
+                //rotations per minute times 360 degrees per rotation times 1/60 minutes/second
             }
             else{
                 motor.setVelocity(0);
