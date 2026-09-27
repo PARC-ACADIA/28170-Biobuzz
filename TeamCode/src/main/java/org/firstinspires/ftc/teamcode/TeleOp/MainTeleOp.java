@@ -6,6 +6,7 @@ import com.arcrobotics.ftclib.gamepad.GamepadKeys;
 import com.arcrobotics.ftclib.hardware.motors.Motor;
 import com.arcrobotics.ftclib.hardware.motors.MotorEx;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.bylazar.configurables.annotations.Configurable;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
@@ -13,7 +14,7 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
-
+@Configurable
 @TeleOp(name = "Main TeleOp", group = "Teleop")
 public class MainTeleOp extends LinearOpMode {
     public DcMotorEx motor;
