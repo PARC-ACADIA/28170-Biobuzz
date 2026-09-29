@@ -1,7 +1,7 @@
 repositories {
     mavenCentral()
     google() // Needed for androidx
-    maven { url = "https://mymaven.bylazar.com/releases" }
+
 }
 
 dependencies {
@@ -16,6 +16,6 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.2.0'
 
     implementation 'com.pedropathing.ivy:pedro:1.1.1'
-    implementation 'com.bylazar:fullpanels:1.0.12'
+
 }
 

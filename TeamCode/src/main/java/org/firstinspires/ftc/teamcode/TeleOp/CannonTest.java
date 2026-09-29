@@ -15,31 +15,33 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 
-@TeleOp(name = "Main TeleOp", group = "Teleop")
-public class MainTeleOp extends LinearOpMode {
-    public MotorEx motor;
+@TeleOp(name = "Cannon Test", group = "Teleop")
+public class CannonTest extends LinearOpMode {
+    public DcMotorEx motor;
 
+    public static double speed;
     public static GamepadEx gp1;
 
     public void runOpMode()throws InterruptedException{
-        motor = new MotorEx(this.hardwareMap, "IntakeMotor", Motor.GoBILDA.RPM_1150);
-        motor.setRunMode(Motor.RunMode.RawPower);
-        motor.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
+        motor = hardwareMap.get(DcMotorEx.class, "Cannon");
+        speed = 3000;
         gp1 = new GamepadEx(gamepad1);
+        motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        motor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        motor.setDirection(DcMotorSimple.Direction.REVERSE);
+        motor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         waitForStart();
 
+        double Ticks = (speed/60)*28;
         while (opModeIsActive()){
 
             if (gp1.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER) > 0.1) {
-                motor.set(1.0);
+                motor.setVelocity(Ticks);
                 //rotations per minute times 360 degrees per rotation times 1/60 minutes/second
             }
-            else if(gp1.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER) > 0.1){
-                motor.set(-1.0);
-            }
             else{
-                motor.set(0);
+                motor.setVelocity(0);
             }
 
         }
