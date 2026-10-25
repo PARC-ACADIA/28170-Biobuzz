@@ -1,0 +1,35 @@
+package org.firstinspires.ftc.teamcode.subsystems;
+
+import static java.lang.Math.abs;
+
+import com.arcrobotics.ftclib.gamepad.GamepadEx;
+import com.arcrobotics.ftclib.gamepad.GamepadKeys;
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+
+import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
+
+public class Outtake {
+    private DcMotorEx motor;
+    public static double speed;
+    public static GamepadEx gp1;
+
+    public Outtake(LinearOpMode opMode) {
+        motor = opMode.hardwareMap.get(DcMotorEx.class, "cannon");
+        speed = 3000;
+        motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        motor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        motor.setDirection(DcMotorSimple.Direction.REVERSE);
+        motor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
+    }
+    public void shoot() {
+        double Ticks = (speed/60)*28;
+        motor.setVelocity(Ticks);
+    }
+
+    public void stopOuttake() {
+        motor.setVelocity(0);
+    }
+}
