@@ -24,9 +24,9 @@ public class MainTeleOp extends LinearOpMode {
 
     public static double SF = -0.025;
     public static double start = 0.1;
-    public static MotorEx motor;
+    public static MotorEx motor, RampMotor;
     public DcMotorEx CannonMotor;
-
+    public static Servo servo;
     public static double end = 0.4;
     //public static double driveMult = 1;
     private GamepadEx gp1;
@@ -36,11 +36,12 @@ public class MainTeleOp extends LinearOpMode {
     public void runOpMode() throws InterruptedException{
         //change this to set flywheel velocity
         speed = 3000; //in rpm
-
+        servo = hardwareMap.get(Servo.class, "Blocker");
 
         motor = new MotorEx(this.hardwareMap, "IntakeMotor", Motor.GoBILDA.RPM_1150);
+        RampMotor = new MotorEx(this.hardwareMap, "IntakeMotor2", Motor.GoBILDA.RPM_312);
         CannonMotor = hardwareMap.get(DcMotorEx.class, "Cannon");
-        Servo servo = hardwareMap.get(Servo.class, "servo");
+
 
         gp1 = new GamepadEx(gamepad1);
 
@@ -69,7 +70,6 @@ public class MainTeleOp extends LinearOpMode {
         double Ticks = (speed/60)*28;
         while (opModeIsActive()) {
 
-            servo.setPosition(0.15);
             gp1.readButtons();
             if (gp1.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER) > 0.1){
                 motor.set(-1);
@@ -77,20 +77,22 @@ public class MainTeleOp extends LinearOpMode {
 
             else if (gp1.isDown(GamepadKeys.Button.RIGHT_BUMPER)){
                 motor.set(1);
+                RampMotor.set(-1);
             }
 
             else{
                 motor.stopMotor();
+                RampMotor.stopMotor();
             }
   ;
             drive(0);
 
-            if (gp1.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER) > 0.1) {
-                motor.setVelocity(Ticks);
+            if (gp1.isDown(GamepadKeys.Button.LEFT_BUMPER)) {
+                CannonMotor.setVelocity(Ticks);
                 //rotations per minute times 360 degrees per rotation times 1/60 minutes/second
             }
             else{
-                motor.setVelocity(0);
+                CannonMotor.setVelocity(0);
             }
             telemetry.addData("LeftX:", gp1.getLeftX());
             telemetry.addData("LeftY:", gp1.getLeftY());
