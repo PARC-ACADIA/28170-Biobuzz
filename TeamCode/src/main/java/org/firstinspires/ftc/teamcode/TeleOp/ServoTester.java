@@ -23,10 +23,11 @@ public class ServoTester extends LinearOpMode {
         waitForStart();
 
         servo.setPosition(0);
+        double position = 0;
         while (opModeIsActive()) {
 
             gp1.readButtons();
-            double position = 0;
+
 
 
             if (gp1.wasJustPressed(GamepadKeys.Button.DPAD_UP)){

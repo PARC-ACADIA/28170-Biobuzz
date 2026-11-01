@@ -41,7 +41,7 @@ public class MainTeleOp extends LinearOpMode {
         motor = new MotorEx(this.hardwareMap, "IntakeMotor", Motor.GoBILDA.RPM_1150);
         RampMotor = new MotorEx(this.hardwareMap, "IntakeMotor2", Motor.GoBILDA.RPM_312);
         CannonMotor = hardwareMap.get(DcMotorEx.class, "Cannon");
-
+        double position = 0;
 
         gp1 = new GamepadEx(gamepad1);
 
@@ -94,6 +94,15 @@ public class MainTeleOp extends LinearOpMode {
             else{
                 CannonMotor.setVelocity(0);
             }
+
+            if (gp1.wasJustPressed(GamepadKeys.Button.A)){
+                position =0.23;
+            }
+            else if (gp1.wasJustPressed(GamepadKeys.Button.B)){
+                position = 0;
+            }
+
+            servo.setPosition(position);
             telemetry.addData("LeftX:", gp1.getLeftX());
             telemetry.addData("LeftY:", gp1.getLeftY());
             telemetry.addData("RightX:", gp1.getRightX());
