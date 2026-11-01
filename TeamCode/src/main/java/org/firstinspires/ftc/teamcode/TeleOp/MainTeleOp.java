@@ -24,7 +24,7 @@ public class MainTeleOp extends LinearOpMode {
 
     public static double SF = -0.025;
     public static double start = 0.1;
-    public static MotorEx motor, RampMotor;
+    public static MotorEx motor;
     public DcMotorEx CannonMotor;
 
     public static double end = 0.4;
@@ -39,7 +39,6 @@ public class MainTeleOp extends LinearOpMode {
 
 
         motor = new MotorEx(this.hardwareMap, "IntakeMotor", Motor.GoBILDA.RPM_1150);
-        RampMotor = new MotorEx (this.hardwareMap, "IntakeMotor2", Motor.GoBILDA.RPM_312);
         CannonMotor = hardwareMap.get(DcMotorEx.class, "Cannon");
         Servo servo = hardwareMap.get(Servo.class, "servo");
 
@@ -78,12 +77,10 @@ public class MainTeleOp extends LinearOpMode {
 
             else if (gp1.isDown(GamepadKeys.Button.RIGHT_BUMPER)){
                 motor.set(1);
-                RampMotor.set(1);
             }
 
             else{
                 motor.stopMotor();
-                RampMotor.stopMotor();
             }
   ;
             drive(0);
