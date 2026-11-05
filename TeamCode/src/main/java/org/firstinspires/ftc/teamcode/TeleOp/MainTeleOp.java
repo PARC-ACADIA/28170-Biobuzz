@@ -14,6 +14,9 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 
+import org.firstinspires.ftc.teamcode.subsystems.Intake;
+import org.firstinspires.ftc.teamcode.subsystems.Outtake;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -88,7 +91,7 @@ public class MainTeleOp extends LinearOpMode {
             drive(0);
 
             if (gp1.isDown(GamepadKeys.Button.LEFT_BUMPER)) {
-                CannonMotor.setVelocity(Ticks);
+                Outtake.shoot(Ticks);
                 //rotations per minute times 360 degrees per rotation times 1/60 minutes/second
             }
             else{
@@ -96,7 +99,7 @@ public class MainTeleOp extends LinearOpMode {
             }
 
             if (gp1.wasJustPressed(GamepadKeys.Button.A)){
-                position =0.23;
+                position = 0.23;
             }
             else if (gp1.wasJustPressed(GamepadKeys.Button.B)){
                 position = 0;

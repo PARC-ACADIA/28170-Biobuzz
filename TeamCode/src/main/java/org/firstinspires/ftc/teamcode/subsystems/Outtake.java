@@ -24,9 +24,8 @@ public class Outtake {
         motor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
     }
-    public void shoot() {
-        double Ticks = (speed/60)*28;
-        motor.setVelocity(Ticks);
+    public void shoot(double ticks) {
+        motor.setVelocity(ticks);
     }
 
     public void stopOuttake() {
