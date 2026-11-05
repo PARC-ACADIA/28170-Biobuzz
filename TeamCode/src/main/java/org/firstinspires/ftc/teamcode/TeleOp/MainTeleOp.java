@@ -77,7 +77,7 @@ public class MainTeleOp extends LinearOpMode {
 
             else if (gp1.isDown(GamepadKeys.Button.RIGHT_BUMPER)){
                 motor.set(1);
-                RampMotor.set(-1);
+                RampMotor.set(1);
             }
 
             else{
