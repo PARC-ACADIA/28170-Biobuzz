@@ -2,10 +2,7 @@ package org.firstinspires.ftc.teamcode.subsystems;
 
 import static java.lang.Math.abs;
 
-import com.arcrobotics.ftclib.gamepad.GamepadEx;
-import com.arcrobotics.ftclib.gamepad.GamepadKeys;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
@@ -13,10 +10,9 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 public class Outtake {
     private DcMotorEx motor;
     public static double speed;
-    public static GamepadEx gp1;
 
     public Outtake(LinearOpMode opMode) {
-        motor = opMode.hardwareMap.get(DcMotorEx.class, "cannon");
+        motor = opMode.hardwareMap.get(DcMotorEx.class, "Cannon");
         speed = 3000;
         motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         motor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);

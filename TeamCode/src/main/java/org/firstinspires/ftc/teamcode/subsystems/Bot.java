@@ -25,12 +25,13 @@ import java.util.List;
 
 public class Bot{
     public LinearOpMode opMode;
-    public static double Mode = 1;
 
+    public Intake intake;
+    public Outtake outtake;
+
+    public static double Mode = 1;
     public static double SF = -0.025;
     public static double start = 0.1;
-    public static MotorEx motor, RampMotor;
-    public DcMotorEx CannonMotor;
     public static Servo servo;
     public static double end = 0.4;
     //public static double driveMult = 1;
@@ -46,9 +47,6 @@ public class Bot{
 
         servo = opMode.hardwareMap.get(Servo.class, "Blocker");
 
-        motor = new MotorEx(opMode.hardwareMap, "IntakeMotor", Motor.GoBILDA.RPM_1150);
-        RampMotor = new MotorEx(opMode.hardwareMap, "IntakeMotor2", Motor.GoBILDA.RPM_312);
-        CannonMotor = opMode.hardwareMap.get(DcMotorEx.class, "Cannon");
         double position = 0;
 
         gp1 = new GamepadEx(opMode.gamepad1);
@@ -68,11 +66,6 @@ public class Bot{
         fr.setRunMode(Motor.RunMode.RawPower);
         bl.setRunMode(Motor.RunMode.RawPower);
         br.setRunMode(Motor.RunMode.RawPower);
-        CannonMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        CannonMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        CannonMotor.setDirection(DcMotorSimple.Direction.REVERSE);
-        CannonMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-
     }
 
     public void addTelemetry() {
@@ -161,31 +154,39 @@ public class Bot{
         double y = (end-start)*x + start;
         return sign * y;
     }
-    public void drive(double correction) {
-        ///uncomment all lines to get the exponential scaling
+    public void periodic() {
         gp1.readButtons();
+        addTelemetry();
+    }
+
+    public void drive(double leftX, double leftY, double rightX, double leftTrigger, boolean leftBumper, double correction) {
+        ///uncomment all lines to get the exponential scaling
         double a;
         double b;
         //double trigger = Math.min(driveMult -gp1.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER), 1);
         //AprilTag Facing Function:
-        if(gp1.isDown(GamepadKeys.Button.LEFT_BUMPER) && abs(gp1.getRightX())<0.1){
+        if(leftBumper && abs(rightX) < 0.1) {
             a = correction;
             b = correction;
+        } else {
+            a = LinearSpeed(-rightX);
+            b = -rightX;
         }
-        else {
-            a = LinearSpeed(-gp1.getRightX());
-            b = -gp1.getRightX();
+
+        if (leftTrigger > 0.1 /*&& Mode == 1*/) {
+            driveRobotCentric(LinearSpeed(leftX) , LinearSpeed(leftY), a);
+        } else /* leftTrigger<0.1 && Mode == 1 */{
+            driveRobotCentric(leftX, leftY, b);
         }
-        if (gp1.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER)>0.1 /*&& Mode == 1*/){
-            driveRobotCentric(LinearSpeed(gp1.getLeftX()) , LinearSpeed(gp1.getLeftY()), a);
-        }
-        else /*if (gp1.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER)<0.1 && Mode == 1)*/{
-            driveRobotCentric(gp1.getLeftX() , gp1.getLeftY(), b );
-        }
-/*
+        /*
         else{
-            driveRobotCentric(variableSpeed(gp1.getLeftX())*trigger, variableSpeed(gp1.getLeftY())*trigger, variableSpeed(-gp1.getRightX())*trigger);
+
+            driveRobotCentric(
+                variableSpeed(leftX) * triggerModifier,
+                variableSpeed(leftY) * triggerModifier,
+                variableSpeed(-rightX) * triggerModifier
+            );
         }
-*/
+        */
     }
 }
