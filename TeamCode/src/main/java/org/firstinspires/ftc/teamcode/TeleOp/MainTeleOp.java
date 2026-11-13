@@ -33,7 +33,7 @@ public class MainTeleOp extends LinearOpMode {
     public MotorEx bl, br, fl, fr;
     public static double speed;
 
-    public void runOpMode() throws InterruptedException{
+    public void runOpMode() throws InterruptedException {
         //change this to set flywheel velocity
         speed = 3000; //in rpm
         servo = hardwareMap.get(Servo.class, "Blocker");
@@ -45,7 +45,7 @@ public class MainTeleOp extends LinearOpMode {
 
         gp1 = new GamepadEx(gamepad1);
 
-        fl = new MotorEx(this.hardwareMap, "LFD",Motor.GoBILDA.RPM_312);
+        fl = new MotorEx(this.hardwareMap, "LFD", Motor.GoBILDA.RPM_312);
         fr = new MotorEx(this.hardwareMap, "RFD", Motor.GoBILDA.RPM_312);
         bl = new MotorEx(this.hardwareMap, "LBD", Motor.GoBILDA.RPM_312);
         br = new MotorEx(this.hardwareMap, "RBD", Motor.GoBILDA.RPM_312);
@@ -67,31 +67,26 @@ public class MainTeleOp extends LinearOpMode {
 
         waitForStart();
 
-        double Ticks = (speed/60)*28;
+        double Ticks = (speed / 60) * 28;
         while (opModeIsActive()) {
 
             gp1.readButtons();
-            if (gp1.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER) > 0.1){
+            if (gp1.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER) > 0.1) {
                 motor.set(-1);
-            }
-
-            else if (gp1.isDown(GamepadKeys.Button.RIGHT_BUMPER)){
+            } else if (gp1.isDown(GamepadKeys.Button.RIGHT_BUMPER)) {
                 motor.set(1);
                 RampMotor.set(-1);
-            }
-
-            else{
+            } else {
                 motor.stopMotor();
                 RampMotor.stopMotor();
             }
-  ;
+            ;
             drive(0);
 
             if (gp1.isDown(GamepadKeys.Button.LEFT_BUMPER)) {
                 CannonMotor.setVelocity(Ticks);
                 //rotations per minute times 360 degrees per rotation times 1/60 minutes/second
-            }
-            else{
+            } else {
                 CannonMotor.setVelocity(0);
             }
             telemetry.addData("LeftX:", gp1.getLeftX());
@@ -103,6 +98,7 @@ public class MainTeleOp extends LinearOpMode {
         }
 
     }
+
     public void driveRobotCentric(double strafeSpeed, double forwardBackSpeed, double turnSpeed) {
         double[] speeds = {
                 (forwardBackSpeed + strafeSpeed - turnSpeed),
@@ -124,6 +120,7 @@ public class MainTeleOp extends LinearOpMode {
         bl.set(speeds[2]);
         br.set(speeds[3]);
     }
+
     public static double variableSpeedV1(double input) {
         double sign = Math.signum(input);
         double x = Math.min(abs(input), 1.0); // magnitude, clamped to [0,1]
@@ -146,6 +143,7 @@ public class MainTeleOp extends LinearOpMode {
 
         return sign * y; // preserves direction of the input
     }
+
     public static double variableSpeed(double input) {
         double sign = Math.signum(input);
         double x = Math.min(abs(input), 1.0); // magnitude, clamped to [0,1]
@@ -169,15 +167,16 @@ public class MainTeleOp extends LinearOpMode {
         return sign * y; // preserves direction of the input
     }
 
-    public static double LinearSpeed(double input){
+    public static double LinearSpeed(double input) {
         double sign = Math.signum(input);
         double x = Math.min(abs(input), 1.0);
 
-        if (x<0.05) return 0.0;//deadzone
+        if (x < 0.05) return 0.0;//deadzone
 
-        double y = (end-start)*x + start;
+        double y = (end - start) * x + start;
         return sign * y;
     }
+
     public void drive(double correction) {
         ///uncomment all lines to get the exponential scaling
         gp1.readButtons();
@@ -185,19 +184,17 @@ public class MainTeleOp extends LinearOpMode {
         double b;
         //double trigger = Math.min(driveMult -gp1.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER), 1);
         //AprilTag Facing Function:
-        if(gp1.isDown(GamepadKeys.Button.LEFT_BUMPER) && abs(gp1.getRightX())<0.1){
+        if (gp1.isDown(GamepadKeys.Button.LEFT_BUMPER) && abs(gp1.getRightX()) < 0.1) {
             a = correction;
             b = correction;
-        }
-        else {
+        } else {
             a = LinearSpeed(-gp1.getRightX());
             b = -gp1.getRightX();
         }
-        if (gp1.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER)>0.1 /*&& Mode == 1*/){
-            driveRobotCentric(LinearSpeed(gp1.getLeftX()) , LinearSpeed(gp1.getLeftY()), a);
-        }
-        else /*if (gp1.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER)<0.1 && Mode == 1)*/{
-            driveRobotCentric(gp1.getLeftX() , gp1.getLeftY(), b );
+        if (gp1.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER) > 0.1 /*&& Mode == 1*/) {
+            driveRobotCentric(LinearSpeed(gp1.getLeftX()), LinearSpeed(gp1.getLeftY()), a);
+        } else /*if (gp1.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER)<0.1 && Mode == 1)*/ {
+            driveRobotCentric(gp1.getLeftX(), gp1.getLeftY(), b);
         }
 /*
         else{
